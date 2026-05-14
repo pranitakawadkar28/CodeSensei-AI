@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import { AppError } from "../utils/AppError.js";
-import { hashPassword } from "../utils/hash.js";
+import { comparePassword, hashPassword } from "../utils/hash.js";
 
 export const registerService = async ({ username, email, password }) => {
   if (!username || !email || !password) {
@@ -22,6 +22,26 @@ export const registerService = async ({ username, email, password }) => {
     email,
     password: hashedPassword,
   });
+
+  return { user };
+};
+
+export const loginService = async ({ email, password }) => {
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    throw new AppError("INVALID_CREDENTIALS", 401);
+  }
+
+  if (!user.isVerified) {
+    throw new AppError("EMAIL_NOT_VERIFIED", 403);
+  }
+
+  const isMatched = await comparePassword(password, user.password);
+
+  if (!isMatched) {
+    throw new AppError("INVALID_CREDENTIALS", 401);
+  }
 
   return { user };
 };

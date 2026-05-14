@@ -1,7 +1,7 @@
 import express from "express";
-import { registerSchema } from "../validators/auth.validators.js";
+import { loginSchema, registerSchema } from "../validators/auth.validators.js";
 import { validate } from "../middleware/errorHandler.js";
-import { registerController } from "../controllers/auth.controller.js";
+import { loginController, registerController } from "../controllers/auth.controller.js";
 
 const authRouter = express.Router();
 
@@ -11,5 +11,10 @@ authRouter.post(
     registerController
 );
 
+authRouter.post(
+    "/login", 
+    validate(loginSchema), 
+    loginController
+);
 
 export default authRouter;
