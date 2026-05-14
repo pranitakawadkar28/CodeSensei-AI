@@ -6,6 +6,7 @@ const requiredEnvVars = [
   "MONGODB_URL",
   "PORT",
   "FRONTEND_URL",
+  "GOOGLE_GEMINI_KEY",
 ];
 
 const missing = requiredEnvVars.filter((key) => !process.env[key]);
@@ -19,3 +20,4 @@ if (missing.length > 0) {
 export const PORT = process.env.PORT;
 export const MONGODB_URL = process.env.MONGODB_URL;
 export const FRONTEND_URL = process.env.FRONTEND_URL;
+export const GOOGLE_GEMINI_KEY = process.env.GOOGLE_GEMINI_KEY;
