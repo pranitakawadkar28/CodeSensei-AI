@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #09090b; /* Professional Zinc-950 */
+    color: #a1a1aa; /* Zinc-400 */
+    font-size: 16px; /* Normal Standard Font Size */
+    line-height: 1.6;
+  }
+
+  /* Professional scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 10px;
+    border: 2px solid #09090b;
+  }
+}
+
+@layer utilities {
+  .pro-card {
+    background: #18181b;
+    border: 1px solid #27272a;
+  }
+  
+  .text-primary {
+    color: #fafafa;
+  }
+
+  .btn-primary {
+    @apply bg-zinc-100 text-zinc-900 px-6 py-2.5 rounded-lg font-semibold transition-all hover:bg-white active:scale-[0.98] shadow-sm shadow-white/5;
+  }
+}

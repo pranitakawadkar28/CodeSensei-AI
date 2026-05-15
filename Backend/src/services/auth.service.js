@@ -1,10 +1,16 @@
 import { User } from "../models/user.model.js";
 import { AppError } from "../utils/AppError.js";
 import { comparePassword, hashPassword } from "../utils/hash.js";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config/env.js";
+
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "7d" });
+};
 
 export const registerService = async ({ username, email, password }) => {
   if (!username || !email || !password) {
-    throw new AppError("PLEASE_PROVIDE_USERNAME,EMAIL,PASSWORD", 400);
+    throw new AppError("PLEASE_PROVIDE_USERNAME, EMAIL, PASSWORD", 400);
   }
 
   const isUserAlreadyExist = await User.findOne({
@@ -23,18 +29,20 @@ export const registerService = async ({ username, email, password }) => {
     password: hashedPassword,
   });
 
-  return { user };
+  const token = generateToken(user._id);
+
+  return { user, token };
 };
 
 export const loginService = async ({ email, password }) => {
+  if (!email || !password) {
+    throw new AppError("PLEASE_PROVIDE_EMAIL_AND_PASSWORD", 400);
+  }
+
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     throw new AppError("INVALID_CREDENTIALS", 401);
-  }
-
-  if (!user.isVerified) {
-    throw new AppError("EMAIL_NOT_VERIFIED", 403);
   }
 
   const isMatched = await comparePassword(password, user.password);
@@ -43,5 +51,7 @@ export const loginService = async ({ email, password }) => {
     throw new AppError("INVALID_CREDENTIALS", 401);
   }
 
-  return { user };
+  const token = generateToken(user._id);
+
+  return { user, token };
 };

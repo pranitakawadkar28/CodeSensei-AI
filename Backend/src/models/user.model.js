@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   email: {
     type: String,
@@ -15,6 +16,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  isVerified: {
+    type: Boolean,
+    default: true // Setting true for now to allow login without email verification flow
+  }
 }, {
   timestamps: true
 });
@@ -28,4 +33,4 @@ userSchema.set("toJSON", {
 });
 
 
-export const  User = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
